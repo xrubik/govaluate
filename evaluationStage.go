@@ -141,10 +141,38 @@ func notEqualStage(left interface{}, right interface{}, parameters Parameters) (
 	return boolIface(!reflect.DeepEqual(left, right)), nil
 }
 func andStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
-	return boolIface(left.(bool) && right.(bool)), nil
+	l := false
+	switch left := left.(type) {
+	case bool:
+		l = left
+	case float64:
+		l = left != 0
+	}
+	r := false
+	switch right := right.(type) {
+	case bool:
+		r = right
+	case float64:
+		r = right != 0
+	}
+	return boolIface(l && r), nil
 }
 func orStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
-	return boolIface(left.(bool) || right.(bool)), nil
+	l := false
+	switch left := left.(type) {
+	case bool:
+		l = left
+	case float64:
+		l = left != 0
+	}
+	r := false
+	switch right := right.(type) {
+	case bool:
+		r = right
+	case float64:
+		r = right != 0
+	}
+	return boolIface(l || r), nil
 }
 func negateStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
 	return -right.(float64), nil
@@ -466,9 +494,19 @@ func isFloat64(value interface{}) bool {
 	return false
 }
 
+func isBoolOrFloat64(value interface{}) bool {
+	switch value.(type) {
+	case bool:
+		return true
+	case float64:
+		return true
+	}
+	return false
+}
+
 /*
-	Addition usually means between numbers, but can also mean string concat.
-	String concat needs one (or both) of the sides to be a string.
+Addition usually means between numbers, but can also mean string concat.
+String concat needs one (or both) of the sides to be a string.
 */
 func additionTypeCheck(left interface{}, right interface{}) bool {
 
@@ -482,8 +520,8 @@ func additionTypeCheck(left interface{}, right interface{}) bool {
 }
 
 /*
-	Comparison can either be between numbers, or lexicographic between two strings,
-	but never between the two.
+Comparison can either be between numbers, or lexicographic between two strings,
+but never between the two.
 */
 func comparatorTypeCheck(left interface{}, right interface{}) bool {
 
@@ -505,8 +543,8 @@ func isArray(value interface{}) bool {
 }
 
 /*
-	Converting a boolean to an interface{} requires an allocation.
-	We can use interned bools to avoid this cost.
+Converting a boolean to an interface{} requires an allocation.
+We can use interned bools to avoid this cost.
 */
 func boolIface(b bool) interface{} {
 	if b {
