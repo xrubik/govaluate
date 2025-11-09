@@ -150,8 +150,20 @@ func TestNoParameterEvaluation(test *testing.T) {
 		},
 		EvaluationTest{
 
+			Name:     "Logical OR operation of two clauses",
+			Input:    "(1 = 1) || (true = true)",
+			Expected: true,
+		},
+		EvaluationTest{
+
 			Name:     "Logical AND operation of two clauses",
 			Input:    "(1 == 1) && (true == true)",
+			Expected: true,
+		},
+		EvaluationTest{
+
+			Name:     "Logical AND operation of two clauses",
+			Input:    "(1 = 1) && (true = true)",
 			Expected: true,
 		},
 		EvaluationTest{

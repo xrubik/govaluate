@@ -22,7 +22,7 @@ const (
 )
 
 /*
-	Represents a test for parsing failures
+Represents a test for parsing failures
 */
 type ParsingFailureTest struct {
 	Name     string
@@ -38,7 +38,13 @@ func TestParsingFailure(test *testing.T) {
 
 			Name:     "Invalid equality comparator",
 			Input:    "1 = 1",
-			Expected: INVALID_TOKEN_KIND,
+			Expected: "",
+		},
+		ParsingFailureTest{
+
+			Name:     "Invalid equality comparator",
+			Input:    "1 == 1",
+			Expected: "",
 		},
 		ParsingFailureTest{
 
@@ -212,23 +218,23 @@ func TestParsingFailure(test *testing.T) {
 
 func runParsingFailureTests(parsingTests []ParsingFailureTest, test *testing.T) {
 
-	var err error
+	// var err error
 
 	fmt.Printf("Running %d parsing test cases...\n", len(parsingTests))
 
 	for _, testCase := range parsingTests {
 
-		_, err = NewEvaluableExpression(testCase.Input)
+		exp, err := NewEvaluableExpression(testCase.Input)
 
-		if err == nil {
+		if testCase.Expected != "" && err == nil {
 
-			test.Logf("Test '%s' failed", testCase.Name)
+			test.Logf("Test '%s' failed, %+v", testCase.Name, exp.tokens)
 			test.Logf("Expected a parsing error, found no error.")
 			test.Fail()
 			continue
 		}
 
-		if !strings.Contains(err.Error(), testCase.Expected) {
+		if err != nil && !strings.Contains(err.Error(), testCase.Expected) {
 
 			test.Logf("Test '%s' failed", testCase.Name)
 			test.Logf("Got error: '%s', expected '%s'", err.Error(), testCase.Expected)

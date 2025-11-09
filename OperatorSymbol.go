@@ -155,6 +155,7 @@ var comparatorSymbols = map[string]OperatorSymbol{
 	"=~": REQ,
 	"!~": NREQ,
 	"in": IN,
+	"=":  EQ,
 }
 
 var logicalSymbols = map[string]OperatorSymbol{
