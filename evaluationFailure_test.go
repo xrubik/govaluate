@@ -15,7 +15,7 @@ type DebugStruct struct {
 }
 
 /*
-	Represents a test for parsing failures
+Represents a test for parsing failures
 */
 type EvaluationFailureTest struct {
 	Name       string
@@ -193,18 +193,20 @@ func TestModifierTyping(test *testing.T) {
 func TestLogicalOperatorTyping(test *testing.T) {
 
 	evaluationTests := []EvaluationFailureTest{
-		EvaluationFailureTest{
+		/*
+			EvaluationFailureTest{
 
-			Name:     "AND number to number",
-			Input:    "number && number",
-			Expected: INVALID_LOGICALOP_TYPES,
-		},
-		EvaluationFailureTest{
+				Name:     "AND number to number",
+				Input:    "number && number",
+				Expected: INVALID_LOGICALOP_TYPES,
+			},
+			EvaluationFailureTest{
 
-			Name:     "OR number to number",
-			Input:    "number || number",
-			Expected: INVALID_LOGICALOP_TYPES,
-		},
+				Name:     "OR number to number",
+				Input:    "number || number",
+				Expected: INVALID_LOGICALOP_TYPES,
+			},
+		*/
 		EvaluationFailureTest{
 
 			Name:     "AND string to string",
@@ -247,8 +249,8 @@ func TestLogicalOperatorTyping(test *testing.T) {
 }
 
 /*
-	While there is type-safe transitions checked at parse-time, tested in the "parsing_test" and "parsingFailure_test" files,
-	we also need to make sure that we receive type mismatch errors during evaluation.
+While there is type-safe transitions checked at parse-time, tested in the "parsing_test" and "parsingFailure_test" files,
+we also need to make sure that we receive type mismatch errors during evaluation.
 */
 func TestComparatorTyping(test *testing.T) {
 

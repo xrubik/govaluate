@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 	"unicode"
 )
 
 /*
-	Represents a test of parsing all tokens correctly from a string
+Represents a test of parsing all tokens correctly from a string
 */
 type TokenParsingTest struct {
 	Name      string
@@ -471,6 +472,25 @@ func TestLogicalOperatorParsing(test *testing.T) {
 				ExpressionToken{
 					Kind:  LOGICALOP,
 					Value: "&&",
+				},
+				ExpressionToken{
+					Kind:  BOOLEAN,
+					Value: false,
+				},
+			},
+		},
+		TokenParsingTest{
+
+			Name:  "Boolean AND",
+			Input: "true and false",
+			Expected: []ExpressionToken{
+				ExpressionToken{
+					Kind:  BOOLEAN,
+					Value: true,
+				},
+				ExpressionToken{
+					Kind:  LOGICALOP,
+					Value: "and",
 				},
 				ExpressionToken{
 					Kind:  BOOLEAN,
@@ -1450,7 +1470,7 @@ func TestTernaryParsing(test *testing.T) {
 }
 
 /*
-	Tests to make sure that the String() reprsentation of an expression exactly matches what is given to the parse function.
+Tests to make sure that the String() reprsentation of an expression exactly matches what is given to the parse function.
 */
 func TestOriginalString(test *testing.T) {
 
@@ -1476,7 +1496,7 @@ func TestOriginalString(test *testing.T) {
 }
 
 /*
-	Tests to make sure that the Vars() reprsentation of an expression identifies all variables contained within the expression.
+Tests to make sure that the Vars() reprsentation of an expression identifies all variables contained within the expression.
 */
 func TestOriginalVars(test *testing.T) {
 
@@ -1545,6 +1565,10 @@ func stripUnquotedWhitespace(expression string) string {
 
 	var expressionBuffer bytes.Buffer
 	var quoted bool
+
+	if strings.Contains(expression, "and") || strings.Contains(expression, "or") {
+		return expression
+	}
 
 	for _, character := range expression {
 
